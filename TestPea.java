@@ -1,86 +1,122 @@
+import com.sun.jdi.InconsistentDebugInfoException;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
 public class TestPea {
-    public static void FailiLugemine(String failinimi,
-                                     ArrayList<String> Riigid,
-                                     ArrayList<String> Vihjed)
-            throws Exception {
+    public static void Tervitamine(){
+        //Sissejuhatav tervitamine:
+        System.out.println("""
+                
+                🤩 Tere tulemast Riikide Äraarvamisemängu! 🤩
 
-        File fail = new File(failinimi);
-        try (Scanner sc = new Scanner(fail, "UTF-8")) {
-            while (sc.hasNextLine()) {
-                String rida = sc.nextLine();
-                String[] andmed = rida.split(": ");
-                //loeme andmed ridadest
-                String riigiNimi = andmed[0];
-                String vihje = andmed[1];
-                //lisame riiginime ja vihje vastavasse järjendisse
-                Riigid.add(riigiNimi);
-                Vihjed.add(vihje);
-            }
-        }
+                Enne kui asume mängu kallale, on vaja üle korrata mängureeglid. 📋
+                
+                🎲 Mäng on lihtne:
+                Ekraanile kuvatakse vihje, nt "See riik on kaardi peal jalakujuline",
+                mis järel pead sina pakkuma, mis riigiga on tegemist.
+                
+                😎 Kui vastasid õigesti, liidetakse sinu puntkiskoorile lisapunkt juurde.
+                """);
+        System.out.println("""
+                🛑✋
+                Enne veel...
+                Kas sa oleksid nii hea ja ütleksid, mis on sinu kui mängija nimi 
+                ning
+                milliste riikide peale sa oma tarkust katsetada soovid?
+                
+                
+                """);
     }
-    public static void ListideGenereerimine(String failinimi, int küsimusteArv, Arvaja mängija) throws Exception {
-        //proovin failiugemise meetodit rakendada
-        ArrayList<String> Riigid = new ArrayList<>();
-        ArrayList<String> Vihjed = new ArrayList<>();
-        FailiLugemine(failinimi, Riigid, Vihjed);
-        for (int i = 0; i < küsimusteArv; i++) {
-            int juhuarv = (int) (Math.random() * 30);
-            System.out.println("Vihje " + (i + 1) + ".");
-            System.out.println(Vihjed.get(juhuarv));
-            //lisabimeetod
-            Scanner skänner = new Scanner(System.in);
-            System.out.print("Teie vastus: ");
-            String arvajaVastus = skänner.nextLine();
-
-            if (arvajaVastus.equals(Riigid.get(juhuarv))){
-                mängija.LisaPunktiskoor();
-            }
-
-
-
-        }
-    }
-
-    public static void main(String[] args) throws Exception {
-        //Tervitamine
-        System.out.println("Tere tulemast Riikide Äraarvamise mängu! \n" +
-                "Enne kui asume mängu kallale, on vaja üle korrata mängureeglid.\n" +
-                "Mäng on lihtne: \n" +
-                "Ekraanile kuvatakse vihje, nt \"See riik on kaardi peal jalakujuline\",\n" +
-                "mis järel pead sina pakkuma, mis riigiga on tegemist.\n" +
-                "Kui vastasid õigesti, liidetakse sinu puntkiskoorile lisapunkt juurde.");
-        System.out.println("Enne veel kas sa oleksid nii hea ja ütleksid, mis on sinu kui mängija nimi ning \n" +
-                "milliste riikide peale sa oma tarkust katsetada soovid?");
-
-        System.out.println();
-        // Loome Scanner objekti, et saaksime kasutajalt sisendit lugeda
+    public static void Mäng(ArrayList<Arvaja> mängijad, ArrayList<String> nimed, boolean jätkame) throws Exception {
+        // Loome Scanner objekti, et saaksime kasutajalt sisendit lugeda.
         Scanner scanner = new Scanner(System.in);
-        // Küsime kasutajalt nime
-        System.out.print("Teie nimi: ");
-        String nimi = scanner.nextLine();
-        System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopa\"): ");
-        String failinimi = scanner.nextLine();
-        //küsime, kui pikk on küsimuste tsükkel
-        System.out.print("Mitmele küsimusele soovite vastata (1-30): ");
-        int küsimusteArv = Integer.parseInt(scanner.nextLine());
-        // Sulgeme Scanner objekti
+        while (jätkame){
+            // Küsime kasutajalt nime.
+            System.out.print("Kes mängib: ");
+            String nimi = scanner.nextLine();
 
 
-        Arvaja mängija = new Arvaja(nimi, 0, 0);
+            System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopa\"): ");
+            String failinimi = scanner.nextLine().toLowerCase();
+
+            //Kontrollime, et failinimi oleks õige.
+            while (!failinimi.equals("maailm")){
+                if (failinimi.equals("euroopa")) break;
+                System.out.println("Mängu andmetes ei ole kahjuks sellist tüüpi riikide nimekirja :(");
+                System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopa\"): ");
+                failinimi = scanner.nextLine().toLowerCase();
+            };
+
+            //K, kui pikk on küsimuste tsükkel.
+            System.out.print("Mitmele küsimusele soovite vastata (1-30): ");
+            int küsimusteArv = Integer.parseInt(scanner.nextLine());
 
 
-        String euroopa = failinimi.toLowerCase() + ".txt";
-        ListideGenereerimine(euroopa, küsimusteArv, mängija);
-        System.out.println();
-        System.out.println("Lõpetasid mängu skooriga: " + mängija.getPunktiskoor());
-        System.out.println(mängija);
 
+            String riikidefail = failinimi.toLowerCase() + ".txt";
+            //Loome Riikideklassi isendi.
+            Riikideklass riigid = new Riikideklass(riikidefail, new ArrayList<>(), new ArrayList<>());
+
+            if (nimed.contains(nimi)){      //Kontrollime, kas eelnevatest mängijatest keegi mängib.
+                int indeks = nimed.indexOf(nimi);
+                Arvaja mängija = mängijad.get(indeks);
+
+                //Vihje genereerimine:
+                riigid.ListideGenereerimine(küsimusteArv, mängija);
+
+                System.out.println();
+                System.out.println("Sinu punktiskoor on praegu: " + mängija.getPunktiskoor());
+                System.out.println(mängija);
+            } else {
+                Arvaja mängija = new Arvaja(nimi, 0);
+
+                //Vihje genereerimine:
+                riigid.ListideGenereerimine(küsimusteArv, mängija);
+
+                System.out.println();
+                System.out.println("Sinu punktiskoor on praegu: " + mängija.getPunktiskoor());
+
+                mängijad.add(mängija);
+                nimed.add(nimi);
+            }
+
+            //Otsustame, kuna lõpetada while tsükkel.
+            System.out.println("Kas soovite veel arvata riike? (jah/ei)");
+            String mängujätkamine = scanner.nextLine();
+            if (mängujätkamine.equals("jah")) {
+            }
+            else jätkame = false;
+        }
+        // Sulgeme Scanner objekti.
         scanner.close();
 
+    }
+    /**Siin võiks võtja välja selgitamise abimeetod olla, kui meil on parameetriks list Arvajatest.*/
+
+
+    public static void main(String[] args) throws Exception {
+        Tervitamine();
+
+        //Talletame arvajate listi.
+        ArrayList<Arvaja> mängijad = new ArrayList<>();
+        ArrayList<String> nimed = new ArrayList<>();
+        boolean jätkame = true;
+        System.out.println();
+
+        Mäng(mängijad, nimed, jätkame);
+
+
+        //Kuvame kõigi mängijate punktiskoorid ekraanile.
+        for (Arvaja arvaja : mängijad) {
+            System.out.println(arvaja);
+        }
+
+        //Selgitame võitja.
+        /**võtija kuulutamise abimeetod*/
+
+        /**Lõpetussõnad*/
     }
 
 }
