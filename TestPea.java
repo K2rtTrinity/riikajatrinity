@@ -17,7 +17,7 @@ public class TestPea {
                 Ekraanile kuvatakse vihje, nt "See riik on kaardi peal jalakujuline",
                 mis järel pead sina pakkuma, mis riigiga on tegemist.
                 
-                😎 Kui vastasid õigesti, liidetakse sinu puntkiskoorile lisapunkt juurde.
+                😎 Kui vastasid õigesti, liidetakse sinu puntkiskoorile punkt.
                 """);
         System.out.println("""
                 🛑✋
@@ -36,26 +36,41 @@ public class TestPea {
             // Küsime kasutajalt nime.
             System.out.print("Kes mängib: ");
             String nimi = scanner.nextLine();
+            while (nimi.equals("")){
+                System.out.println("Palun sisesta nimi :)");
+                nimi = scanner.nextLine();
+            }
 
-
-            System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopa\"): ");
-            String failinimi = scanner.nextLine().toLowerCase();
+            System.out.print("Milliste riikide peale mängime (\"maailm\" või \"Euroopa Liit\"): ");
+            String failinimi = scanner.nextLine().toLowerCase().trim().replace(" ", "");
 
             //Kontrollime, et failinimi oleks õige.
             while (!failinimi.equals("maailm")){
-                if (failinimi.equals("euroopa")) break;
+                if (failinimi.equals("euroopaliit")) break;
                 System.out.println("Mängu andmetes ei ole kahjuks sellist tüüpi riikide nimekirja :(");
-                System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopa\"): ");
-                failinimi = scanner.nextLine().toLowerCase();
+                System.out.print("Milliste riikide peale mängime (\"maailm\" või \"Euroopa Liit\"): ");
+                failinimi = scanner.nextLine().toLowerCase().trim().replace(" ", "");
             };
 
-            //K, kui pikk on küsimuste tsükkel.
-            System.out.print("Mitmele küsimusele soovite vastata (1-30): ");
-            int küsimusteArv = Integer.parseInt(scanner.nextLine());
+            int küsimusteArv = 0;
+            //Küsime, kui pikk on küsimuste tsükkel.
+            while (true) {
+                System.out.print("Mitmele küsimusele soovite vastata (1-27): ");
+                try {
+                    küsimusteArv = Integer.parseInt(scanner.nextLine());
+                    // Kontrolli, kas number jääb vahemikku 1-27
+                    if (küsimusteArv >= 1 && küsimusteArv <= 27) {
+                        break; // Korrektne sisestus, välju tsüklist
+                    } else {
+                        System.out.println("Palun sisestage number vahemikus 1 kuni 27.");
+                    }
+                } catch (NumberFormatException e) {
+                    // Sisestus ei olnud teisendatav täisarvuks
+                    System.out.println("Vigane sisestus. Palun sisestage arvuline väärtus.");
+                }
+            }
 
-
-
-            String riikidefail = failinimi.toLowerCase() + ".txt";
+            String riikidefail = failinimi + ".txt";
             //Loome Riikideklassi isendi.
             Riikideklass riigid = new Riikideklass(riikidefail, new ArrayList<>(), new ArrayList<>());
 
@@ -72,7 +87,7 @@ public class TestPea {
             } else {
                 Arvaja mängija = new Arvaja(nimi, 0);
 
-                //Vihje genereerimine:
+                //Vihje genereerimine ja vastamine:
                 riigid.ListideGenereerimine(küsimusteArv, mängija);
 
                 System.out.println();
@@ -86,6 +101,7 @@ public class TestPea {
             System.out.println("Kas soovite veel arvata riike? (jah/ei)");
             String mängujätkamine = scanner.nextLine();
             if (mängujätkamine.equals("jah")) {
+                jätkame = true;
             }
             else jätkame = false;
         }
@@ -93,8 +109,20 @@ public class TestPea {
         scanner.close();
 
     }
-    /**Siin võiks võtja välja selgitamise abimeetod olla, kui meil on parameetriks list Arvajatest.*/
 
+    public static Arvaja võitjaSelgitamine(ArrayList<Arvaja> mängijad){
+        if (mängijad.isEmpty()) {
+            return null;
+        }
+        Arvaja võidumees = mängijad.get(0);
+        for (Arvaja arvaja : mängijad) {
+            if (arvaja.getPunktiskoor() > võidumees.getPunktiskoor()) {
+                võidumees = arvaja;
+            }
+
+        }
+        return võidumees;
+    }
 
     public static void main(String[] args) throws Exception {
         Tervitamine();
@@ -107,16 +135,29 @@ public class TestPea {
 
         Mäng(mängijad, nimed, jätkame);
 
+        System.out.println("""
+                                
+                🎲 Mäng sai läbi! 🎲
 
-        //Kuvame kõigi mängijate punktiskoorid ekraanile.
+                Mängijate lõppskoorid olid järgmised:
+                """);
+
         for (Arvaja arvaja : mängijad) {
             System.out.println(arvaja);
         }
 
         //Selgitame võitja.
-        /**võtija kuulutamise abimeetod*/
+        Arvaja võitja = võitjaSelgitamine(mängijad);
+        System.out.println("Ning mängu võitis " + võitja.toString());
 
-        /**Lõpetussõnad*/
+        System.out.println("""
+                
+                Loodame, et sul oli lõbus, õppisid mõningaid uusi fakte riikide kohta ning kinnistasid enda riikide teadmisi!
+          
+                Näeme varsti! ✋🤩
+                """);
+
+
     }
 
 }
