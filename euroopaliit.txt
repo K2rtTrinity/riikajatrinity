@@ -3,7 +3,6 @@ Belgia: Euroopa südames, kuulus oma šokolaadi, õlle ja ajalooliste linnade po
 Bulgaaria: Musta mere rannik ja Rooside oru maagia.
 Eesti: E-riik Balti mere ääres, tuntud oma digiühiskonna ja vanalinnade poolest.
 Hispaania: Flamenco, paella ja ajaloolised Alhambra paleed.
-Holland: Madalmaad, kus tuulikud ja tulbiväljad kohtuvad innovatiivse veemajandusega.
 Horvaatia: Adriamaa pärl, mida ehib Dubrovnik ja tuhanded saared.
 Iirimaa: Roheliste väljade ja kõrtsimuusika saar, kus legendid elavad edasi.
 Itaalia: Renesaansi häll, kuulus oma köögi, moe ja rikkaliku ajaloo poolest.
@@ -24,4 +23,5 @@ Sloveenia: Roheline süda Euroopas, kus Alpid kohtuvad säravsiniste järvedega 
 Soome: Tuhande järve maa ja Põhjamaade heaolu, kus saunakultuur ja metsade rahu valitsevad.
 Ungari: Termaveeallikate ja paprika maa, kus Budapesti ajaloolised sillad ületavad Doonau jõge.
 Tšehhi: Boheemia ja Moravia kroon, kus õllekultuur ja gooti arhitektuur kohtuvad Praha ajaloolises südames.
-Taani: Vikingite pärand ja minimalistlik disain, kus Kopenhaageni värvikad majad peegelduvad kanalites.
+Taani: Viikingite pärand ja minimalistlik disain, kus Kopenhaageni värvikad majad peegelduvad kanalites.
+Slovakkia: Tatrate mäestik, Bratslava loss ja keskaegne vanalinn.

@@ -33,11 +33,6 @@ public class Riikideklass {
         }
     }
 
-    /**
-     * while tsükliga nt kontrollida, kas see juhuarv on indeksina eksisteerinud juba enne
-     * soovitan luua uus list vms, millest saab kontrollida .contains() funktsiooniga, et
-     * kas see vihje on juba siin listis, ku jah, siis otsib nii kaua uue vihje, mis ei kordu
-     */
     public void ListideGenereerimine(int küsimusteArv, Arvaja mängija) throws Exception {
         //Loeme failist riiginimed ja vihjed, ning lisame need õigesse listi.
         FailiLugemine();
@@ -55,11 +50,12 @@ public class Riikideklass {
             //lisabimeetod
             Scanner skänner = new Scanner(System.in);
             System.out.print("Teie vastus: ");
-            String arvajaVastus = skänner.nextLine();
+            String arvajaVastus = skänner.nextLine().toLowerCase().trim().replace(" ", "");
 
 
-            if (arvajaVastus.equals(Riigid.get(juhuarv))) {
-                System.out.println("\uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25 Jätka samas vaimus!");
+
+            if (arvajaVastus.equals(Riigid.get(juhuarv).toLowerCase())) {
+                System.out.println("\uD83D\uDD25 \uD83D\uDD25 \uD83D\uDD25 Õige vastus! Jätka samas vaimus!");
                 mängija.LisaPunktiskoor();
             } else {
                 System.out.println("\uD83E\uDD75 Pole hullu, järgmine kord tead, et õige vastus on " + Riigid.get(juhuarv) + ".");

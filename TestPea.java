@@ -36,7 +36,10 @@ public class TestPea {
             // Küsime kasutajalt nime.
             System.out.print("Kes mängib: ");
             String nimi = scanner.nextLine();
-
+            while (nimi.equals("")){
+                System.out.println("Palun sisesta nimi :)");
+                nimi = scanner.nextLine();
+            }
 
             System.out.print("Milliste riikide peale mängime (\"maailm\" või \"Euroopa Liit\"): ");
             String failinimi = scanner.nextLine().toLowerCase().trim().replace(" ", "");
@@ -45,15 +48,27 @@ public class TestPea {
             while (!failinimi.equals("maailm")){
                 if (failinimi.equals("euroopaliit")) break;
                 System.out.println("Mängu andmetes ei ole kahjuks sellist tüüpi riikide nimekirja :(");
-                System.out.print("Milliste riikide peale mängime (\"maailm\" või \"euroopaliit\"): ");
-                failinimi = scanner.nextLine().toLowerCase();
+                System.out.print("Milliste riikide peale mängime (\"maailm\" või \"Euroopa Liit\"): ");
+                failinimi = scanner.nextLine().toLowerCase().trim().replace(" ", "");
             };
 
+            int küsimusteArv = 0;
             //Küsime, kui pikk on küsimuste tsükkel.
-            System.out.print("Mitmele küsimusele soovite vastata (1-27): ");
-            int küsimusteArv = Integer.parseInt(scanner.nextLine());
-
-
+            while (true) {
+                System.out.print("Mitmele küsimusele soovite vastata (1-27): ");
+                try {
+                    küsimusteArv = Integer.parseInt(scanner.nextLine());
+                    // Kontrolli, kas number jääb vahemikku 1-27
+                    if (küsimusteArv >= 1 && küsimusteArv <= 27) {
+                        break; // Korrektne sisestus, välju tsüklist
+                    } else {
+                        System.out.println("Palun sisestage number vahemikus 1 kuni 27.");
+                    }
+                } catch (NumberFormatException e) {
+                    // Sisestus ei olnud teisendatav täisarvuks
+                    System.out.println("Vigane sisestus. Palun sisestage arvuline väärtus.");
+                }
+            }
 
             String riikidefail = failinimi + ".txt";
             //Loome Riikideklassi isendi.
