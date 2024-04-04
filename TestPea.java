@@ -1,6 +1,3 @@
-import com.sun.jdi.InconsistentDebugInfoException;
-
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -151,12 +148,12 @@ public class TestPea {
 
         //Selgitame võitja.
         Arvaja võitja = võitjaSelgitamine(mängijad);
-        System.out.println("Ning mängu võitis " + võitja.toString());
+        System.out.println("");
+        System.out.println("Mängu võitis " + võitja.toString());
 
         System.out.println("""
                 
                 Loodame, et sul oli lõbus, õppisid mõningaid uusi fakte riikide kohta ning kinnistasid enda riikide teadmisi!
-          
                 Näeme varsti! ✋🤩
                 """);
 
