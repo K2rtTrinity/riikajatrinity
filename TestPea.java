@@ -100,10 +100,13 @@ public class TestPea {
             //Otsustame, kuna lõpetada while tsükkel.
             System.out.println("Kas soovite veel arvata riike? (jah/ei)");
             String mängujätkamine = scanner.nextLine();
+            while (!mängujätkamine.equals("jah") && !mängujätkamine.equals("ei")){
+                System.out.println("Palun sisesta jah või ei :)");
+                mängujätkamine = scanner.nextLine();
+            }
             if (mängujätkamine.equals("jah")) {
                 jätkame = true;
-            }
-            else jätkame = false;
+            } else jätkame = false;
         }
         // Sulgeme Scanner objekti.
         scanner.close();
